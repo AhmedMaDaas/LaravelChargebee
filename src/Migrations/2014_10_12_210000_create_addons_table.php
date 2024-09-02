@@ -12,9 +12,9 @@ class CreateAddonsTable extends Migration
      */
     public function up()
     {
-        Schema::create('addons', function (Blueprint $table) {
+        Schema::create(config('chargebee.addons_table_name'), function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('subscription_id')->index()->unsigned();
+            $table->integer(config('chargebee.addons_subscription_id_column_name'))->index()->unsigned();
             $table->string('name');
             $table->string('addon_id');
             $table->integer('quantity')->default(0);
@@ -29,6 +29,6 @@ class CreateAddonsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('addons');
+        Schema::drop(config('chargebee.addons_table_name'));
     }
 }
