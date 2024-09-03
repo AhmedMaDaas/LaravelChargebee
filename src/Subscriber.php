@@ -1,9 +1,9 @@
 <?php
 namespace TijmenWierenga\LaravelChargebee;
 
-use ChargeBee_Environment;
-use ChargeBee_HostedPage;
-use ChargeBee_Subscription;
+use ChargeBee\ChargeBee\Environment as ChargeBee_Environment;
+use ChargeBee\ChargeBee\Models\HostedPage as ChargeBee_HostedPage;
+use ChargeBee\ChargeBee\Models\Subscription as ChargeBee_Subscription;
 use Illuminate\Database\Eloquent\Model;
 use TijmenWierenga\LaravelChargebee\Exceptions\MissingPlanException;
 use TijmenWierenga\LaravelChargebee\Exceptions\UserMismatchException;
