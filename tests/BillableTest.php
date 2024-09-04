@@ -316,7 +316,7 @@ class User extends Eloquent {
     public function subscription($plan = null)
     {
         return new Subscriber($this, $plan, [
-            'model' => App\User::class,
+            'model' => App\Models\User::class,
 
             'redirect' => [
                 'success' => null,

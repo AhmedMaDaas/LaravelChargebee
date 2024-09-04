@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateAddonsTable extends Migration
+class CreateChargebeeAddonsTable extends Migration
 {
     /**
      * Create the subscription table

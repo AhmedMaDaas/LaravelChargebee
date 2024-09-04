@@ -14,7 +14,23 @@ class Subscription extends Model
 {
     use HandlesWebhooks;
 
-    protected $fillable = ['subscription_id', 'plan_id', config('chargebee.subscription_billable_id_column_name'), 'quantity', 'last_four', 'trial_ends_at', 'ends_at', 'next_billing_at'];
+    protected $fillable;
+
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+
+        $this->fillable = [
+            'subscription_id', 
+            'plan_id', 
+            config('chargebee.subscription_billable_id_column_name'), 
+            'quantity', 
+            'last_four', 
+            'trial_ends_at', 
+            'ends_at', 
+            'next_billing_at'
+        ];
+    }
 
     /**
      * @var array
