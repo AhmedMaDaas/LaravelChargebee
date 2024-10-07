@@ -37,6 +37,13 @@ class Subscriber
     private $plan = null;
 
     /**
+     * The Prices IDs where the model will subscribe to.
+     *
+     * @var null
+     */
+    private $prices = null;
+
+    /**
      * An array containing all add-ons for the subscription.
      *
      * @var array
@@ -54,13 +61,14 @@ class Subscriber
      * @param Model|null $model
      * @param null $plan
      */
-    public function __construct(Model $model = null, $plan = null, array $config = null)
+    public function __construct(Model $model = null, $plan = null, array $config = null, array $prices = null)
     {
         // Set up Chargebee environment keys
         ChargeBee_Environment::configure(getenv('CHARGEBEE_SITE'), getenv('CHARGEBEE_KEY'));
 
         // You can set a plan on the constructor, but it's not required
         $this->plan = $plan;
+        $this->prices = $prices;
         $this->model = $model;
 
         // Set config settings.
@@ -124,6 +132,22 @@ class Subscriber
             'redirectUrl' => $this->config['redirect']['success'],
             'cancelledUrl' => $this->config['redirect']['cancelled'],
             'passThruContent' => base64_encode($this->model->id)
+        ])->hostedPage()->url;
+    }
+
+    /**
+     * @return mixed
+     * @throws MissingPlanException
+     */
+    public function getCheckoutForItemsUrl($embed = false)
+    {
+        if (! $this->prices) throw new MissingPlanException('No prices was set to assign to the customer.');
+
+        return ChargeBee_HostedPage::checkoutNewForItems([
+            'subscription_items' => $this->prices,
+            'redirect_url' => $this->config['redirect']['success'],
+            'cancel_url' => $this->config['redirect']['cancelled'],
+            'embed' => $embed,
         ])->hostedPage()->url;
     }
 

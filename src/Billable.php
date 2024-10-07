@@ -12,9 +12,9 @@ trait Billable
      * @param null $plan
      * @return Subscriber
      */
-    public function subscription($plan = null)
+    public function subscription($plan = null, $config = null, $prices = null)
     {
-        return new Subscriber($this, $plan);
+        return new Subscriber($this, $plan, $config, $prices);
     }
 
     /**
