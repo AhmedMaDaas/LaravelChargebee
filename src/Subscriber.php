@@ -178,7 +178,7 @@ class Subscriber
             'next_billing_at'   => $subscription->currentTermEnd,
             'trial_ends_at'     => $subscription->trialEnd,
             'quantity'          => $subscription->planQuantity,
-            'last_four'         => $card->last4,
+            'last_four'         => $card?->last4,
         ]);
 
         if ($addons) {
