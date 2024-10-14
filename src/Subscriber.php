@@ -44,6 +44,20 @@ class Subscriber
     private $prices = null;
 
     /**
+     * The customer details.
+     *
+     * @var null
+     */
+    private $customer = null;
+
+    /**
+     * The billing address details.
+     *
+     * @var null
+     */
+    private $billingAddress = null;
+
+    /**
      * An array containing all add-ons for the subscription.
      *
      * @var array
@@ -61,7 +75,7 @@ class Subscriber
      * @param Model|null $model
      * @param null $plan
      */
-    public function __construct(Model $model = null, $plan = null, array $config = null, array $prices = null)
+    public function __construct(Model $model = null, $plan = null, array $config = null, array $prices = null, array $customer = null, array $billingAddress = null)
     {
         // Set up Chargebee environment keys
         ChargeBee_Environment::configure(getenv('CHARGEBEE_SITE'), getenv('CHARGEBEE_KEY'));
@@ -69,6 +83,8 @@ class Subscriber
         // You can set a plan on the constructor, but it's not required
         $this->plan = $plan;
         $this->prices = $prices;
+        $this->customer = $customer;
+        $this->billingAddress = $billingAddress;
         $this->model = $model;
 
         // Set config settings.
@@ -144,6 +160,8 @@ class Subscriber
         if (! $this->prices) throw new MissingPlanException('No prices was set to assign to the customer.');
 
         return ChargeBee_HostedPage::checkoutNewForItems([
+            'billing_address' => $this->billingAddress,
+            'customer' => $this->customer,
             'subscription_items' => $this->prices,
             'redirect_url' => $this->config['redirect']['success'],
             'cancel_url' => $this->config['redirect']['cancelled'],
