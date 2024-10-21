@@ -4,6 +4,7 @@ namespace TijmenWierenga\LaravelChargebee;
 use ChargeBee\ChargeBee\Environment as ChargeBee_Environment;
 use ChargeBee\ChargeBee\Models\HostedPage as ChargeBee_HostedPage;
 use ChargeBee\ChargeBee\Models\Subscription as ChargeBee_Subscription;
+use ChargeBee\ChargeBee\Models\Estimate as ChargeBee_Estimate;
 use Illuminate\Database\Eloquent\Model;
 use TijmenWierenga\LaravelChargebee\Exceptions\MissingPlanException;
 use TijmenWierenga\LaravelChargebee\Exceptions\UserMismatchException;
@@ -167,6 +168,20 @@ class Subscriber
             'cancel_url' => $this->config['redirect']['cancelled'],
             'embed' => $embed,
         ])->hostedPage()->url;
+    }
+
+    /**
+     * @return mixed
+     * @throws MissingPlanException
+     */
+    public function createSubItemEstimate()
+    {
+        if (! $this->prices) throw new MissingPlanException('No prices was set to assign to the customer.');
+
+        return ChargeBee_Estimate::createSubItemEstimate([
+            'billing_address' => $this->billingAddress,
+            'subscription_items' => $this->prices,
+        ])->estimate();
     }
 
     /**
