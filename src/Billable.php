@@ -24,4 +24,9 @@ trait Billable
     {
         return $this->hasMany(Subscription::class);
     }
+
+    public function customer($customerDetails)
+    {
+        return new Customer($this, $customerDetails);
+    }
 }
