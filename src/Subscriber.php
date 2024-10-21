@@ -73,6 +73,13 @@ class Subscriber
     private $coupon = null;
 
     /**
+     * An object contain 3DS token
+     * 
+     * @var array
+     */
+    private $paymentIntent = null;
+
+    /**
      * @param Model|null $model
      * @param null $plan
      */
@@ -90,6 +97,11 @@ class Subscriber
 
         // Set config settings.
         $this->config = ($config) ?: $this->getDefaultConfig();
+    }
+
+    public function add3DSPaymentIntent(array $paymentIntent){
+        $this->paymentIntent = $paymentIntent;
+        return $this;
     }
 
     /**
@@ -168,6 +180,21 @@ class Subscriber
             'cancel_url' => $this->config['redirect']['cancelled'],
             'embed' => $embed,
         ])->hostedPage()->url;
+    }
+
+    /**
+     * @return mixed
+     * @throws MissingPlanException
+     */
+    public function createWithItemsForCustomer($customerId)
+    {
+        if (! $this->prices) throw new MissingPlanException('No prices was set to assign to the customer.');
+
+        return ChargeBee_Subscription::createWithItems($customerId, [
+            'billing_address' => $this->billingAddress,
+            'subscription_items' => $this->prices,
+            'payment_intent' => $this->paymentIntent,
+        ])->subscription();
     }
 
     /**
